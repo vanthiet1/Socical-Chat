@@ -8,7 +8,9 @@ import './index.css'
 import ContentProvider from './hooks/contexts/TabUiContext.jsx';
 import UserProvider from './hooks/contexts/UserLogin.jsx';
 import UserRomProvider from './hooks/contexts/UserContext.jsx';
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+// const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const clerkPubKey = "pk_test_dG9sZXJhbnQtYXBoaWQtNzMuY2xlcmsuYWNjb3VudHMuZGV2JA"
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ClerkProvider publishableKey={clerkPubKey}>
         <QueryClientProvider client={queryClient}>
