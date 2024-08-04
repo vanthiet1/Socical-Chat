@@ -1,6 +1,9 @@
 const { Server } = require('socket.io');
-
+const Message = require('../model/MessageModel');
+const User = require('../model/UserModel')
 let io;
+
+const users = {}; 
 
 const initIo = (server) => {
     io = new Server(server, {
@@ -12,21 +15,60 @@ const initIo = (server) => {
 
     io.on('connection', (socket) => {
         console.log('Người dùng kết nối:', socket.id);
-   
-        socket.on('join', (userId) => {
-            console.log(`Người dùng ${userId} đăng nhập`);
-            socket.join(userId);
-        });
         
-        socket.on('sendFriendRequest', ({ username , toUserId  }) => {
-            io.to(toUserId).emit('friendRequestReceived', {username});
+        socket.on('join', async (userId) => {
+            users[socket.id] = userId; 
+            try {
+              const user = await User.findById(userId); 
+              if (user) {
+                console.log(`Người dùng ${user.name} đăng nhập`);
+                io.emit('userConnected', { userId: userId, username: user.name });
+              }
+            } catch (error) {
+              console.error('Error fetching user:', error);
+            }
+            socket.join(userId);
+          });
+
+        socket.on('sendMessage', async (data) => {
+            const { fromUserId, toUserId, message , timestamp } = data;
+            if (!fromUserId || !toUserId || !message ||!timestamp) {
+                console.error('Invalid data received:', data);
+                return;
+            }
+            try {
+                const newMessage = new Message({ fromUserId, toUserId, message , timestamp });
+                await newMessage.save();
+                io.to(toUserId).emit('receiveMessage', { fromUserId, message , timestamp });
+            } catch (error) {
+                console.error('Error saving message:', error);
+            }
         });
 
-        socket.on('disconnect', () => {
-            console.log('Người dùng đã ngắt kết nối:', socket.id);
+        socket.on('heartbeat', () => {
+            console.log('Received heartbeat from client');
+        });
+
+        socket.on('sendFriendRequest', ({ username, toUserId, fromUserId }) => {
+            io.to(toUserId).emit('friendRequestReceived', { username, fromUserId });
+        });
+
+        socket.on('disconnect', async () => {
+            const userId = users[socket.id];
+            if(userId){
+                try {
+                    const user = await User.findById(userId); 
+                    if (user) {
+                        console.log('Người dùng đã ngắt kết nối:', user.name);
+                        io.emit('userDisconnected', { userId: userId, username: user.name });
+                    }
+                } catch (error) {
+                    console.error('Error fetching user:', error);
+                }
+            }
+            delete users[socket.id]; 
         });
     });
-
 };
 
 const getIo = () => {

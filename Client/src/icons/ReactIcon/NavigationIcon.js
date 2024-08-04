@@ -1,8 +1,8 @@
-import { BiSolidMessageRoundedAdd } from "react-icons/bi";
 import { FaUserFriends } from "react-icons/fa";
 import { BsMailbox2Flag } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
 export {
-    BiSolidMessageRoundedAdd,
     FaUserFriends,
-    BsMailbox2Flag
+    BsMailbox2Flag,
+    FaUsers
 }

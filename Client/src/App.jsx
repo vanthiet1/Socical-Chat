@@ -7,7 +7,7 @@ import PathRouterUser from './config/pathRouter';
 import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   return (
-    <div>
+    <div >
       <ToastContainer />
       <Routes>
         {PublicRouterUser.map((route, index) => {

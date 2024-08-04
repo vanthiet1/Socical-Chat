@@ -1,6 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../utils/http';
+import { showToastSuccess, showToastError } from '../config/toastConfig';
 const userService = {
+  useGetAnUserById: (id) => {
+    const { data, isLoading } = useQuery({
+      queryKey: ['anUser', id],
+      queryFn: async () => {
+        const { data } = await axiosInstance.get(`users/room/${id}`)
+        return data;
+      },
+      enabled: !!id,
+    });
+    return { data, isLoading };
+  },
   useUsers: () => {
     const { data, isLoading, error } = useQuery({
       queryKey: ['users'],
@@ -11,16 +23,17 @@ const userService = {
     });
     return { data, isLoading, error };
   },
+
   useGetAnUser: (googleId) => {
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
       queryKey: ['anUser', googleId],
       queryFn: async () => {
-        const {data} = await axiosInstance.get(`users/${googleId}`);
+        const { data } = await axiosInstance.get(`users/${googleId}`);
         return data;
       },
       enabled: !!googleId,
     });
-    return { data };
+    return { data, isLoading };
   },
   useSearchAddFriend: (keyword) => {
     return useQuery({
@@ -46,7 +59,6 @@ const userService = {
       },
     });
   },
- 
   useSendFriendRequest: () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -55,7 +67,40 @@ const userService = {
         return response.data;
       },
       onSuccess: () => {
+
         queryClient.invalidateQueries(['friends']);
+      },
+    });
+  },
+  useAcceptFriendRequest: () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: async (user) => {
+        const response = await axiosInstance.post('/users/acceptFriendRequest', user);
+        return response.data;
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['friends']);
+        showToastSuccess(data.message);
+      },
+      onError: (error) => {
+        showToastError(error.message);
+      },
+    });
+  },
+  useCancelFriendRequest: () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: async (user) => {
+        const response = await axiosInstance.post('/users/cancelFriendRequest', user);
+        return response.data;
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['friends']);
+        showToastSuccess(data.message);
+      },
+      onError: (error) => {
+        showToastError(error.message);
       },
     });
   },

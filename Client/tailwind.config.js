@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        'sidebar': '#181818',
+        'navigation': '#181818',
       },
+    
     },
 
   },

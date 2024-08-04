@@ -6,10 +6,10 @@ const Friends = () => {
     <>
   
       <div className="flex justify-between w-full">
-        <div className="w-[25%]">
+        <div className="w-[25%] ">
           <Sidebar />
         </div>
-        <div className="w-[75%]">
+        <div className="w-[75%] h-dvh">
           <Navigation />
           <Main />
         </div>

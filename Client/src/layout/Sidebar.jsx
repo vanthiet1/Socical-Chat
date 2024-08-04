@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { useClerk } from '@clerk/clerk-react';
 import { useContext } from 'react';
 import { ListPage } from "../components/ListPage/page.jsx"
-import { GoPlus, FaMicrophone, ImHeadphones, IoSettingsSharp , ImExit } from '../icons/ReactIcon/SideBarIcon.js'
-import User from '../components/ListUser/User.jsx';
+import { GoPlus, IoSettingsSharp , ImExit } from '../icons/ReactIcon/SideBarIcon.js'
+import User from '../components/Friend/ListFriend.jsx';
 import userService from '../services/User.js';
 import { UserContext } from '../hooks/contexts/UserLogin.jsx';
 const Sidebar = () => {
@@ -26,7 +26,7 @@ const Sidebar = () => {
      
 
     return (
-        <div className=" bg-[#2b2d31] h-dvh p-5 relative">
+        <div className="bg-sidebar p-5 relative h-full">
             <div className="bg-[#1E1F22] pl-2 py-1 rounded-[5px] w-full cursor-pointer mb-3 ">
                 <span className="text-[#acacac]">Tìm hoặc bắt đầu cuộc trò chuyện</span>
             </div>
@@ -47,8 +47,8 @@ const Sidebar = () => {
                 <GoPlus className='text-[#c2c2c2]  hover:cursor-pointer hover:text-[#fff] text-[20px]' />
             </div>
             <User />
-            <div className=" w-full absolute bottom-0 left-0 p-2 bg-[#161616] flex items-center justify-between">
-                <div className='flex items-end gap-2'>
+            <div className=" w-full absolute bottom-0 left-0 p-2 bg-[#161616] flex items-center justify-between ">
+                <div className='flex items-end gap-2 '>
                     <img src={user.imageUrl} className="w-[50px] rounded-full" alt="avartar" />
                     <div>
                         <span className="block text-[#fff] text-[16px]">
@@ -58,9 +58,8 @@ const Sidebar = () => {
                     </div>
                  
                 </div>
-                <div className='flex gap-3'>
-                        <FaMicrophone className='text-[#fff] cursor-pointer text-[20px]' />
-                        <ImHeadphones className='text-[#fff] cursor-pointer text-[20px]' />
+                <div className='flex gap-3 '>
+           
                         <IoSettingsSharp className='text-[#fff] cursor-pointer text-[20px]' />
                         <ImExit className='text-[#fff] cursor-pointer text-[20px]' onClick={()=>signOut()}/>
                     </div>

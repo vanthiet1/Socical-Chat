@@ -5,10 +5,10 @@ const cors = require('cors');
 require('dotenv').config();
 const connectDB = require('./db/connectDB');
 const http = require('http');
-const { initIo } = require('./socket/socketManager'); 
+const { initIo } = require('./socket/socketManager');
 
 const app = express();
-const server = http.createServer(app); 
+const server = http.createServer(app);
 
 // Middleware
 app.use(morgan("common"));
@@ -24,9 +24,15 @@ initIo(server);
 // Routes
 const userRouter = require('./routers/userRouter');
 const searchRouter = require('./routers/searchRouter');
+const friendRouter = require('./routers/friendRouter');
+const mesageRouter = require('./routers/messageRouter');
 
-app.use('/api/v1', userRouter); 
+
+app.use('/api/v1', userRouter);
 app.use('/api/v1', searchRouter); 
+app.use('/api/v1', friendRouter);
+app.use('/api/v1', mesageRouter);
+
 
 // Default route
 app.get('/', (req, res) => {

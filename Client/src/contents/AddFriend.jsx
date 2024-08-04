@@ -24,10 +24,9 @@ const AddFriend = () => {
     // Fetch current user details
     const { data: userDetails } = userService.useGetAnUser(googleId);
     // Search for friends
-    const { data, isLoading, error } = userService.useSearchAddFriend(debouncedSearch);
+    const { data, isLoading, error  } = userService.useSearchAddFriend(debouncedSearch);
 
     useEffect(() => {
-
         showToastError(sendFriendRequestMutation.error?.response?.data?.message);
         showToastSuccess(sendFriendRequestMutation.data?.message);
     }, [sendFriendRequestMutation.data, sendFriendRequestMutation.error]);
@@ -50,15 +49,17 @@ const AddFriend = () => {
         setFriendSelect(selectedFriend);
         setShowFriendSelected(true);
     };
+    
     const handleSendRequest = () => {
         if (!friendSelect?._id || !userDetails?.name) {
             return;
         }
+
         const dataSend = {
-            username: userDetails.name, //gửi
+            username: userDetails.name, 
+            fromUserId: userDetails._id, //gửi
             toUserId: friendSelect._id,     //nhận
         }
-        console.log( dataSend);
         if (socket && socket.emit) {
             socket.emit('sendFriendRequest', dataSend);
         } else {
@@ -67,17 +68,12 @@ const AddFriend = () => {
 
         if (sendFriendRequestMutation && sendFriendRequestMutation.mutate) {
             sendFriendRequestMutation.mutate(
-                { fromUserId: userDetails._id, toUserId: friendSelect._id }
+                { fromUserId: userDetails._id, toUserId: friendSelect._id  }
             );
         } else {
             console.error("sendFriendRequestMutation chưa được khởi tạo hoặc không có phương thức mutate");
         }
 
-        if (handleCancelAddFriend && typeof handleCancelAddFriend === 'function') {
-            handleCancelAddFriend();
-        } else {
-            console.error("handleCancelAddFriend không được định nghĩa hoặc không phải là một hàm");
-        }
     };
 
     const handleCancelAddFriend = () => {
@@ -86,6 +82,7 @@ const AddFriend = () => {
         setShowFriendSelected(false);
         setValuePlaceholder('Bạn có thể thêm bạn bè bằng tên người dùng');
     };
+
 
     return (
         <>
@@ -115,12 +112,13 @@ const AddFriend = () => {
                             Error: {error.message}
                         </div>
                     )}
+
                     {data && data.length > 0 && (
-                        <div className="absolute left-0 right-0 bg-[#1E1F22] p-2 rounded-b-md mt-1 max-h-60 overflow-y-auto">
-                            {data.map((friendSearch) => (
+                        <div className="absolute left-0 right-0 bg-[#1E1F22] rounded-b-md mt-1 max-h-60 overflow-y-auto">
+                            {data.filter(friendSearch => friendSearch._id !== userDetails?._id).map((friendSearch) => (
                                 <div
                                     onClick={() => handleSelectFriend(friendSearch)}
-                                    className="flex items-center gap-3 my-3 cursor-pointer w-full hover:bg-[#292929] duration-300 p-2 rounded-[5px]"
+                                    className="flex items-center gap-3 my-3 cursor-pointer w-full hover:bg-[#292929] duration-300 p-3 rounded-[5px]"
                                     key={friendSearch._id}
                                 >
                                     <img className="w-[30px] rounded-full" src={friendSearch.profileImage} alt="" />
@@ -129,6 +127,8 @@ const AddFriend = () => {
                             ))}
                         </div>
                     )}
+
+
                 </div>
             </div>
         </>

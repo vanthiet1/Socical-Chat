@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import {useUser } from '@clerk/clerk-react';
-
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
