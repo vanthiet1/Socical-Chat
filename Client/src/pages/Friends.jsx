@@ -9,7 +9,7 @@ const Friends = () => {
         <div className="w-[25%] ">
           <Sidebar />
         </div>
-        <div className="w-[75%] h-dvh">
+        <div className="w-[75%] h-dvh overflow-hidden">
           <Navigation />
           <Main />
         </div>
