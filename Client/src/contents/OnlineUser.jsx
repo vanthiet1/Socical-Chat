@@ -1,9 +1,11 @@
+
 const UserOnline = () => {
-    return (
-        <div>
-            trang user online
-        </div>
-    );
+
+  return (
+    <div>
+      Trang user online
+    </div>
+  );
 };
 
 export default UserOnline;

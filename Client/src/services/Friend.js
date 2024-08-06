@@ -7,6 +7,8 @@ const friendService = {
     return useMutation({
       mutationFn: async (user) => {
         const response = await axiosInstance.post('/users/unfriends', user);
+         console.log('response',response);
+         
         return response.data;
       },
       onSuccess: (data) => {

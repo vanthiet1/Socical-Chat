@@ -14,7 +14,7 @@ import FormatDateAndTime from "../../config/timeMessage";
 const Chat = () => {
   const { user } = useContext(UserContext);
   const { idUserSelecteRom } = useContext(UserRomChatContext);
-  const { data } = userService.useGetAnUserById(idUserSelecteRom);
+  const { data: selectedUser } = userService.useGetAnUserById(idUserSelecteRom);
   const { data: userLogin } = userService.useGetAnUser(user?.id);
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -26,7 +26,11 @@ const Chat = () => {
   const deleteMessageMutation = messageService.useDeleteMessageUser();
   const [hoveredMessageId, setHoveredMessageId] = useState(null);
   const [lastMessageTime, setLastMessageTime] = useState(0);
-  const [isUserOnline, setIsUserOnline] = useState(JSON.parse(localStorage.getItem('isOnline')) || false);
+
+  const [isUserOnline] = useState(() => {
+ const storedStatus = JSON.parse(localStorage.getItem("onlineStatus"));
+    return storedStatus || {};
+  });
 
   useEffect(() => {
     if (initialMessages) {
@@ -52,24 +56,6 @@ const Chat = () => {
       socket.emit('join', user._id);
     };
 
-    const handleUserConnected = ({ username }) => {
-      showToastSuccess(`Người dùng ${username} đã online`);
-      setIsUserOnline(true);
-      localStorage.setItem('isOnline', JSON.stringify(true));
-    };
-
-    const handleDisconnect = () => {
-      console.log("Đã ngắt kết nối");
-      setIsUserOnline(false);
-      localStorage.setItem('isOnline', JSON.stringify(false));
-    };
-
-    const handleUserDisconnected = ({ username }) => {
-      showToastSuccess(`Người dùng ${username} đã ngắt kết nối`);
-      setIsUserOnline(false);
-      localStorage.setItem('isOnline', JSON.stringify(false));
-    };
-
     const handleReconnectAttempt = () => {
       console.log("Attempting to reconnect...");
     };
@@ -87,9 +73,6 @@ const Chat = () => {
       socket.on('receiveMessage', handleReceiveMessage);
       socket.on('messageDeleted', handleMessageDeleted);
       socket.on('reconnect', handleReconnect);
-      socket.on('userConnected', handleUserConnected);
-      socket.on('userDisconnected', handleUserDisconnected);
-      socket.on('disconnect', handleDisconnect);
       socket.on('reconnect_attempt', handleReconnectAttempt);
       heartbeatInterval = setInterval(sendHeartbeat, 30000);
 
@@ -97,25 +80,24 @@ const Chat = () => {
         socket.off('receiveMessage', handleReceiveMessage);
         socket.off('messageDeleted', handleMessageDeleted);
         socket.off('reconnect', handleReconnect);
-        socket.off('userConnected', handleUserConnected);
-        socket.off('disconnect', handleDisconnect);
         socket.off('reconnect_attempt', handleReconnectAttempt);
-        socket.off('userDisconnected', handleUserDisconnected);
         socket.emit('leave', user._id);
         clearInterval(heartbeatInterval);
       };
     }
-  }, [user, idUserSelecteRom]);
+  }, [user, idUserSelecteRom, isUserOnline, userLogin?._id]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      socket.emit('disconnect');
+      socket.emit('userDisconnected', { userId: user._id });
+      const updatedStatus = { ...isUserOnline, [user._id]: false };
+      localStorage.setItem("onlineStatus", JSON.stringify(updatedStatus));
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [user, isUserOnline]);
 
   const handleSendMessage = () => {
     const currentTime = Date.now();
@@ -125,7 +107,7 @@ const Chat = () => {
       fromUserId: userLogin?._id,
       toUserId: idUserSelecteRom,
       message: inputMessage,
-      timestamp: new Date().toISOString() 
+      timestamp: new Date().toISOString()
     };
 
     socket.emit('sendMessage', messageData);
@@ -151,7 +133,7 @@ const Chat = () => {
   const unFriendMutation = friendService.useUnFriendRequest();
   const handleUnFriend = () => {
     const DataUnFriend = {
-      fromUserId: data?._id,
+      fromUserId: selectedUser?._id,
       toUserId: userLogin?._id,
     };
     if (unFriendMutation) {
@@ -174,22 +156,20 @@ const Chat = () => {
     socket.emit('deleteMessage', { id });
   };
 
-  
   return (
     <div>
       <NavProfileRoom
-        avatar_user_room={data?.profileImage}
-        name_user_room={data?.name}
-        isOnline={isUserOnline}
+        avatar_user_room={selectedUser?.profileImage}
+        name_user_room={selectedUser?.name}
+        userId={selectedUser?._id}
       />
-  
       <div className="flex">
         <div className="w-[70%] p-5 bg-[#272729] relative h-[625px] flex flex-col">
           <div className="border-b-[1px] pb-3 mb-5">
             <div>
-              <img className="w-[70px] rounded-[50px]" src={data?.profileImage} alt="" />
+              <img className="w-[70px] rounded-[50px]" src={selectedUser?.profileImage} alt="" />
               <span className="text-[#fff] font-bold block pt-3">
-                {data?.name}
+                {selectedUser?.name}
               </span>
             </div>
             <div>
@@ -205,31 +185,31 @@ const Chat = () => {
           <div className="overflow-y-auto overflow-x-hidden scrollbar-thin h-[330px] scroll-hidden">
             <div className="flex flex-col">
               {messages.map((msg, index) => (
-                 <>
-                 <div key={msg._id} className={`flex flex-col mb-2 ${msg.fromUserId === userLogin?._id ? 'items-end' : 'items-start'}`}>
-                 <span className="text-[#fff] pb-1">{ FormatDateAndTime(msg.
-                  timestamp)}</span>
-                 <div
-                  key={msg._id}
-                  className={`p-3 rounded-lg w-max flex items-center gap-3 ${msg.fromUserId === userLogin?._id ? 'bg-blue-500' : 'bg-gray-700'} text-white max-w-xs break-words`}
-                  onMouseEnter={() => setHoveredMessageId(index)}
-                  onMouseLeave={() => setHoveredMessageId(null)}
-                >
-                  
-                  <div>
-                    <span>{msg.message}</span>
-                  </div>
-                  {msg.fromUserId === userLogin?._id && hoveredMessageId === index && (
+                <>
+                  <div key={msg._id} className={`flex flex-col mb-2 ${msg.fromUserId === userLogin?._id ? 'items-end' : 'items-start'}`}>
+                    <span className="text-[#fff] pb-1">{FormatDateAndTime(msg.
+                      timestamp)}</span>
                     <div
-                      className="cursor-pointer"
-                      onClick={() => handleDeleteChat(msg._id)}
+                      key={msg._id}
+                      className={`p-3 rounded-lg w-max flex items-center gap-3 ${msg.fromUserId === userLogin?._id ? 'bg-blue-500' : 'bg-gray-700'} text-white max-w-xs break-words`}
+                      onMouseEnter={() => setHoveredMessageId(index)}
+                      onMouseLeave={() => setHoveredMessageId(null)}
                     >
-                      <FaTrashAlt />
+
+                      <div>
+                        <span>{msg.message}</span>
+                      </div>
+                      {msg.fromUserId === userLogin?._id && hoveredMessageId === index && (
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => handleDeleteChat(msg._id)}
+                        >
+                          <FaTrashAlt />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                 </div>
-                 </>
+                  </div>
+                </>
               ))}
               <div ref={messagesEndRef} />
             </div>
@@ -256,8 +236,8 @@ const Chat = () => {
           </div>
         </div>
         <SidebarRoom
-          avatar_user_room={data?.profileImage}
-          name_user_room={data?.name}
+          avatar_user_room={selectedUser?.profileImage}
+          name_user_room={selectedUser?.name}
           handleUnFriend={handleUnFriend}
         />
       </div>

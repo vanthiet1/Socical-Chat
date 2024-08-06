@@ -2,6 +2,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '../utils/http';
 import { showToastSuccess, showToastError } from '../config/toastConfig';
 const userService = {
+  useGetAllUsers: () => {
+    const { data, isLoading, error } = useQuery({
+      queryKey: ['users'],
+      queryFn: async () => {
+        const response = await axiosInstance.get('/users/all');
+        return response.data;
+      },
+    });
+    return { data, isLoading, error };
+  },
   useGetAnUserById: (id) => {
     const { data, isLoading } = useQuery({
       queryKey: ['anUser', id],
@@ -17,7 +27,7 @@ const userService = {
     const { data, isLoading, error } = useQuery({
       queryKey: ['users'],
       queryFn: async () => {
-        const response = await axiosInstance.get('users');
+        const response = await axiosInstance.get('/users');
         return response.data;
       },
     });

@@ -21,7 +21,6 @@ const initIo = (server) => {
             try {
               const user = await User.findById(userId); 
               if (user) {
-                console.log(`Người dùng ${user.name} đăng nhập`);
                 io.emit('userConnected', { userId: userId, username: user.name });
               }
             } catch (error) {
