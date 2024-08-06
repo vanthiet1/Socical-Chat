@@ -8,8 +8,8 @@ const users = {};
 const initIo = (server) => {
     io = new Server(server, {
         cors: {
-            // origin: "http://localhost:3000",
-            origin: "https://socical-chat.vercel.app",
+            origin: "http://localhost:3000",
+            // origin: "https://socical-chat.vercel.app",
             
             methods: ["GET", "POST"]
         }
