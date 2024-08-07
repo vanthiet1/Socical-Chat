@@ -51,7 +51,6 @@ const PendingConfirm = () => {
                         <>
                             <div className="bg-[#2b2d31] p-5" key={userRequest._id}>
                                 <div className="flex items-center justify-between">
-
                                     <div className="flex items-center gap-3">
                                         <div className="relative">
                                             <img className="w-[50px] rounded-[50%]" src={userRequest?.fromUserId?.profileImage} alt="avatar" />

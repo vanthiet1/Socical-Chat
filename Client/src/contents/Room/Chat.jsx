@@ -10,9 +10,10 @@ import messageService from "../../services/Message";
 import userService from "../../services/User";
 import { showToastSuccess, showToastError } from "../../config/toastConfig";
 import FormatDateAndTime from "../../config/timeMessage";
-
+import { ContentContext } from "../../hooks/contexts/TabUiContext";
 const Chat = () => {
   const { user } = useContext(UserContext);
+  const {handleContentChange} = useContext(ContentContext)
   const { idUserSelecteRom } = useContext(UserRomChatContext);
   const { data: selectedUser } = userService.useGetAnUserById(idUserSelecteRom);
   const { data: userLogin } = userService.useGetAnUser(user?.id);
@@ -158,31 +159,41 @@ const Chat = () => {
 
   return (
     <div>
-      <NavProfileRoom
+
+      <div className="flex h-lvh">
+        <div className="w-[70%]  bg-[#272729] relative  flex flex-col">
+        <NavProfileRoom
         avatar_user_room={selectedUser?.profileImage}
         name_user_room={selectedUser?.name}
         userId={selectedUser?._id}
       />
-      <div className="flex">
-        <div className="w-[70%] p-5 bg-[#272729] relative h-[625px] flex flex-col">
-          <div className="border-b-[1px] pb-3 mb-5">
+          <div className="border-b-[1px] pb-3 mb-5 flex items-center gap-2 p-3">
             <div>
               <img className="w-[70px] rounded-[50px]" src={selectedUser?.profileImage} alt="" />
-              <span className="text-[#fff] font-bold block pt-3">
-                {selectedUser?.name}
-              </span>
+          
             </div>
             <div>
+            <span className="text-[#fff] font-bold block pt-3">
+                {selectedUser?.name}
+              </span>
               <p className="text-[#fff]">Hãy tạo cuộc trò chuyện cùng với những người bạn của bạn</p>
+              <div className="flex gap-2">
               <button
-                className="mt-2 bg-[#4a4a4a] p-1 w-[200px] rounded-[5px] text-[#fff] hover:bg-[#616161] duration-300"
+                className="mt-2 bg-red-600 p-1 w-[200px] rounded-[5px] text-[#fff] hover:bg-red-500  duration-300"
                 onClick={handleUnFriend}
               >
                 Xóa kết bạn
               </button>
+              <button
+                className="mt-2 bg-[#4a4a4a] p-1 w-[200px] rounded-[5px] text-[#fff] hover:bg-[#616161] duration-300"
+                onClick={()=>handleContentChange(1)}
+              >
+                Quay lại
+              </button>
+              </div>
             </div>
           </div>
-          <div className="overflow-y-auto overflow-x-hidden scrollbar-thin h-[330px] scroll-hidden">
+          <div className="overflow-y-auto overflow-x-hidden scrollbar-thin h-[60%] scroll-hidden p-2">
             <div className="flex flex-col">
               {messages.map((msg, index) => (
                 <>

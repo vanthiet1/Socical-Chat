@@ -23,8 +23,6 @@ const Sidebar = () => {
         }
       }, [user]);
   
-     
-
     return (
         <div className="bg-sidebar p-5 relative h-full">
             <div className="bg-[#1E1F22] pl-2 py-1 rounded-[5px] w-full cursor-pointer mb-3 ">

@@ -26,8 +26,7 @@ const Main = () => {
 
   return (
     <>
-      <div>
-
+      <div  >
         {activeContent === 1 && (<UserOnline />)}
         {activeContent === 2 && (<AllUser />)}
         {activeContent === 3 && (<PendingConfirm />)}

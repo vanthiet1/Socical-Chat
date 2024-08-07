@@ -47,7 +47,7 @@ const Navigation = () => {
     }, [data]);
 
     return (
-        <div className="flex justify-between px-5  py-7 h-[30px] items-center bg-navigation ">
+        <div className="flex justify-between px-5  py-7 items-center bg-navigation">
             <div className="flex items-center gap-10">
                 <div className="flex items-center gap-2 ">
                     <FaUserFriends className='text-[#fff] text-[20px] font-semibold' />
