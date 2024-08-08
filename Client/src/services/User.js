@@ -52,21 +52,19 @@ const userService = {
         const { data } = await axiosInstance.get('/users/search/friends', {
           params: { keyword }
         });
+        
         return data;
       },
       enabled: !!keyword,
     });
   },
   useSaveUser: () => {
-    const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async (user) => {
         const response = await axiosInstance.post('/users/google', user);
         return response.data;
       },
-      onSuccess: () => {
-        queryClient.invalidateQueries(['users']);
-      },
+    
     });
   },
   useSendFriendRequest: () => {

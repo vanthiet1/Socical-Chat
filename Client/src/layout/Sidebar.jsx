@@ -7,10 +7,12 @@ import { GoPlus, IoSettingsSharp , ImExit } from '../icons/ReactIcon/SideBarIcon
 import User from '../components/Friend/ListFriend.jsx';
 import userService from '../services/User.js';
 import { UserContext } from '../hooks/contexts/UserLogin.jsx';
+import { ContentContext } from '../hooks/contexts/TabUiContext.jsx';
 const Sidebar = () => {
     const { signOut } = useClerk();
     const { user } = useContext(UserContext);
     const saveUserMutation = userService.useSaveUser();
+    const {handleContentChange} = useContext(ContentContext)
  
     useEffect(() => {
         if (user) {
@@ -32,7 +34,7 @@ const Sidebar = () => {
                 {ListPage.map((page, index) => (
                     <div key={index}>
                         <Link>
-                            <div className="bg-[#404148] py-2 pl-2 rounded-[5px] hover:bg-[#36363a]">
+                            <div className="bg-[#404148] py-2 pl-2 rounded-[5px] hover:bg-[#36363a]" onClick={()=>handleContentChange(2)}>
                                 <li className="flex items-center gap-3 text-[#fff]">
                                     {page.iconPage} {page.namePage}</li>
                             </div>

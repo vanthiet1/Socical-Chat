@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import { ContentContext } from "../hooks/contexts/TabUiContext";
 import AllUser from "../contents/AllUser";
-import UserOnline from "../contents/OnlineUser";
 import AddFriend from "../contents/AddFriend";
 import Chat from "../contents/Room/Chat";
 import PendingConfirm from "../contents/PendingConfirm";
@@ -27,7 +26,6 @@ const Main = () => {
   return (
     <>
       <div  >
-        {activeContent === 1 && (<UserOnline />)}
         {activeContent === 2 && (<AllUser />)}
         {activeContent === 3 && (<PendingConfirm />)}
         {activeContent === 5 && (<AddFriend />)}

@@ -45,11 +45,11 @@ const PendingConfirm = () => {
     }
     return (
         <>
-            <div className="bg-[#2b2d31] p-5">
+            <div className="bg-[#2b2d31] p-5 h-dvh ">
                 {friendRequestsCount > 0 ? (
                     dataFriendRequests && dataFriendRequests.map((userRequest) => (
                         <>
-                            <div className="bg-[#2b2d31] p-5" key={userRequest._id}>
+                            <div className="bg-[#2b2d31] p-5 border-b-[1px] border-b-slate-400" key={userRequest._id}>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="relative">

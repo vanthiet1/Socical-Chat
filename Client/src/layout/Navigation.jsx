@@ -53,7 +53,6 @@ const Navigation = () => {
                     <FaUserFriends className='text-[#fff] text-[20px] font-semibold' />
                     <span className='text-[#fff] font-semibold'>Bạn Bè</span>
                 </div>
-                <span className={`text-[#fff] cursor-pointer ${activeContent === 1 ? 'border-b-2 border-slate-100 rounded-sm' : ''}`} onClick={() => handleContentChange(1)}>Hoạt động</span>
                 <span className={`text-[#fff] cursor-pointer ${activeContent === 2 ? 'border-b-2 border-slate-100 rounded-sm' : ''}`} onClick={() => handleContentChange(2)}>Tất cả</span>
                 <div className='relative'>
                     <span className={`text-[#fff] cursor-pointer ${activeContent === 3 ? 'border-b-2 border-slate-100 rounded-sm' : ''}`} onClick={() => handleContentChange(3)}>Chờ xác nhận</span>

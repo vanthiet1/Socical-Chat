@@ -1,6 +1,7 @@
 
 const SearchFriends = (props) => {
     const { placeholder, style, nameButtonSearch, value, onChange, friendSelect, onSendRequest, CloseAddFriend, handleCancelAddFriend, showFriendSelected } = props;
+    
     return (
         <>
             <div className="relative">

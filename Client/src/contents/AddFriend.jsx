@@ -82,6 +82,8 @@ const AddFriend = () => {
         setShowFriendSelected(false);
         setValuePlaceholder('Bạn có thể thêm bạn bè bằng tên người dùng');
     };
+    console.log(data);
+    
 
 
     return (

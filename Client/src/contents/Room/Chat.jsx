@@ -103,6 +103,7 @@ const Chat = () => {
   const handleSendMessage = () => {
     const currentTime = Date.now();
     if (!inputMessage.trim() || currentTime - lastMessageTime < 1000) return;
+    if(userLogin?._id === idUserSelecteRom) return
 
     const messageData = {
       fromUserId: userLogin?._id,
@@ -112,7 +113,12 @@ const Chat = () => {
     };
 
     socket.emit('sendMessage', messageData);
-    setMessages((prevMessages) => [...prevMessages, messageData]);
+    setMessages((prevMessages) => {
+      if (idUserSelecteRom === userLogin?._id || idUserSelecteRom === userLogin?._id) {
+          return [...prevMessages, messageData];
+      }
+      return prevMessages;
+  })
     setInputMessage("");
     setLastMessageTime(currentTime);
   };

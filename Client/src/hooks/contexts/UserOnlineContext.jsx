@@ -3,26 +3,26 @@ import socket from "../../config/socketConfig";
 import { showToastSuccess } from "../../config/toastConfig";
 import { UserContext } from "./UserLogin";
 import userService from "../../services/User";
-
 export const UserOnlineContext = createContext();
 
 const UserOnlineProvider = ({ children }) => {
   const { user } = useContext(UserContext);
   const { data: userLogin } = userService.useGetAnUser(user?.id);
 
-
   const [isUserOnline, setIsUserOnline] = useState(() => {
     const storedStatus = JSON.parse(localStorage.getItem("onlineStatus"));
     return storedStatus || {};
   });
-
+  
   const socketRef = useRef(socket);
-
+  const isFriend = (userId) => {
+    return userLogin?.friends?.some(friend => friend._id === userId); 
+  };
   const data = {
     isUserOnline,
   }
   const handleUserConnected = ({ username, userId }) => {
-    if (userId === userLogin?._id) return;
+    if (userId === userLogin?._id || !isFriend(userId)) return;
 
     showToastSuccess(`Người dùng ${username} đã online`);
     setIsUserOnline((prevStatus) => {
@@ -31,8 +31,9 @@ const UserOnlineProvider = ({ children }) => {
       return updatedStatus;
     });
   };
+
   const handleUserDisconnected = ({ username, userId }) => {
-    if (userId === userLogin?._id) return;
+    if (userId === userLogin?._id || !isFriend(userId)) return;
 
     showToastSuccess(`Người dùng ${username} đã ngắt kết nối`);
     setIsUserOnline((prevStatus) => {
