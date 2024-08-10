@@ -4,7 +4,7 @@ const SidebarRoom = (props) => {
     const { avatar_user_room, name_user_room , handleUnFriend} = props;
     const [showRemoveFriend, setShowRemoveFriend] = useState(false);
     return (
-        <div className="w-[30%] bg-[#232428]  relative ">
+        <div className="w-[30%] bg-[#232428]  relative max-md:hidden">
             <div>
                 <div className="flex justify-end items-center bg-[#d1d2d0] p-5 gap-3 relative">
                     <div className="bg-[#60605F] hover:bg-black duration-300 flex justify-center items-center rounded-[50%] w-[30px] h-[30px] p-2 cursor-pointer relative" >

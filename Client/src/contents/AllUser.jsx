@@ -33,7 +33,7 @@ const AllUser = () => {
 
     return (
         <>
-            <div className="bg-[#2b2d31] p-5 h-dvh" >
+            <div className="bg-[#2b2d31] p-5 h-dvh " >
                 {User.friends.length > 0 ? (
                     User.friends.map((friend) => {
                         const isOnline = isUserOnline[friend._id]; 

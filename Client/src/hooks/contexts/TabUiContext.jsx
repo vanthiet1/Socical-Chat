@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 export const ContentContext = createContext();
 
 const ContentProvider = ({ children }) => {
-    const [activeContent, setActiveContent] = useState(1);
+    const [activeContent, setActiveContent] = useState(2);
     
     const handleContentChange = (index) => {
         setActiveContent(index);

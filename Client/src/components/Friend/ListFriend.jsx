@@ -4,7 +4,8 @@ import userService from "../../services/User";
 import { UserContext } from "../../hooks/contexts/UserLogin";
 import { ContentContext } from "../../hooks/contexts/TabUiContext";
 import { UserRomChatContext } from "../../hooks/contexts/UserContext";
-const UserList = () => {
+const UserList = (props) => {
+    const {showSIdeBar} = props
     const [listFriend, setLIstFriend] = useState([])
     const { user } = useContext(UserContext);
     const {handleGetUserRoom} = useContext(UserRomChatContext);
@@ -26,7 +27,7 @@ const UserList = () => {
                 )}
                 {listFriend && listFriend.length > 0 ? (
                     listFriend.map((user) => (
-                        <div key={user.id} className="flex gap-3 my-4 p-2 items-center cursor-pointer hover:bg-[#37393e] rounded-[5px] duration-300" onClick={() => {handleContentChange(6) ,handleGetUserRoom(user?._id) }}>
+                        <div key={user.id} className="flex gap-3 my-4 p-2 items-center cursor-pointer hover:bg-[#37393e] rounded-[5px] duration-300" onClick={() => {handleContentChange(6) ,handleGetUserRoom(user?._id) , showSIdeBar(true) }}>
                             <img src={user.profileImage} className="w-[35px] rounded-full" alt="avartar" />
                             <span className="block text-[#fff]">
                                 {user.name}

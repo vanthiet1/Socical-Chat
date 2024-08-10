@@ -6,15 +6,15 @@ const SearchFriends = (props) => {
         <>
             <div className="relative">
                 <input
-                    className={` ${style}`}
+                    className={` ${style} max-md:text-[16px]`}
                     type="text"
                     placeholder={placeholder || undefined}
                     value={value}
                     onChange={onChange}
                     disabled={!!friendSelect._id}
                 />
-                <div className="absolute top-2 right-4">
-                    <button className={`px-[30px] py-[5px] rounded-[5px] font-semibold ${friendSelect._id ? 'bg-[#5865f2] text-[#fff]' : 'text-[#8D8D91] bg-[#3b428a]'}`}
+                <div className="absolute top-2 right-4 max-md:right-1">
+                    <button className={`px-[30px] py-[5px] max-md:px-[20px] max-md:text-[15px] rounded-[5px] font-semibold ${friendSelect._id ? 'bg-[#5865f2] text-[#fff]' : 'text-[#8D8D91] bg-[#3b428a]'}`}
                         disabled={!friendSelect._id} 
                         onClick={onSendRequest}
                     >

@@ -14,7 +14,7 @@ const AddFriend = () => {
 
     const [searchFriend, setSearchFriend] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [valuePlaceholder, setValuePlaceholder] = useState("Bạn có thể thêm bạn bè bằng tên người dùng");
+    const [valuePlaceholder, setValuePlaceholder] = useState("Bạn có thể thêm bạn bè ");
     const [friendSelect, setFriendSelect] = useState({});
     const [showFriendSelected, setShowFriendSelected] = useState(false);
 
@@ -80,15 +80,14 @@ const AddFriend = () => {
         setSearchFriend("");
         setFriendSelect({});
         setShowFriendSelected(false);
-        setValuePlaceholder('Bạn có thể thêm bạn bè bằng tên người dùng');
+        setValuePlaceholder('Bạn có thể thêm bạn bè');
     };
-    console.log(data);
     
 
 
     return (
         <>
-            <div className="p-5 bg-[#313338]">
+            <div className="p-5 bg-[#313338] max-md:h-dvh">
                 <h1 className="text-[#fff] my-2">THÊM BẠN BÈ</h1>
                 <span className="text-[#a8a8a8]">Bạn có thể thêm bạn bè bằng tên người dùng </span>
                 <div className="mt-3 relative">

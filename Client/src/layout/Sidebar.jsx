@@ -8,11 +8,13 @@ import User from '../components/Friend/ListFriend.jsx';
 import userService from '../services/User.js';
 import { UserContext } from '../hooks/contexts/UserLogin.jsx';
 import { ContentContext } from '../hooks/contexts/TabUiContext.jsx';
-const Sidebar = () => {
+const Sidebar = (props) => {
+    const {showSIdeBar} = props
     const { signOut } = useClerk();
     const { user } = useContext(UserContext);
     const saveUserMutation = userService.useSaveUser();
     const {handleContentChange} = useContext(ContentContext)
+    
  
     useEffect(() => {
         if (user) {
@@ -26,9 +28,10 @@ const Sidebar = () => {
       }, [user]);
   
     return (
-        <div className="bg-sidebar p-5 relative h-full">
-            <div className="bg-[#1E1F22] pl-2 py-1 rounded-[5px] w-full cursor-pointer mb-3 ">
+        <div className=" bg-sidebar p-5 relative h-full">
+            <div className="bg-[#1E1F22] pl-2 py-1 rounded-[5px] w-full cursor-pointer mb-3 flex justify-between max-sm:p-4">
                 <span className="text-[#acacac]">Tìm hoặc bắt đầu cuộc trò chuyện</span>
+                <span className='text-[#fff]' onClick={()=>showSIdeBar(true)}>Quay lại</span>
             </div>
             <div>
                 {ListPage.map((page, index) => (
@@ -46,7 +49,7 @@ const Sidebar = () => {
                 <span className='text-[#c2c2c2] group-hover:text-[#fff] hover:text-[#fff]  '>Chọn bạn bè để nhắn</span>
                 <GoPlus className='text-[#c2c2c2]  hover:cursor-pointer hover:text-[#fff] text-[20px]' />
             </div>
-            <User />
+            <User showSIdeBar={showSIdeBar} />
             <div className=" w-full absolute bottom-0 left-0 p-2 bg-[#161616] flex items-center justify-between ">
                 <div className='flex items-end gap-2 '>
                     <img src={user.imageUrl} className="w-[50px] rounded-full" alt="avartar" />
