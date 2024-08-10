@@ -112,13 +112,9 @@ const Chat = () => {
       timestamp: new Date().toISOString()
     };
 
+    
+    setMessages((prevMessages) => [...prevMessages, messageData]);
     socket.emit('sendMessage', messageData);
-    setMessages((prevMessages) => {
-      if (idUserSelecteRom === userLogin?._id || idUserSelecteRom === userLogin?._id) {
-          return [...prevMessages, messageData];
-      }
-      return prevMessages;
-  })
     setInputMessage("");
     setLastMessageTime(currentTime);
   };
@@ -165,7 +161,6 @@ const Chat = () => {
 
   return (
     <div>
-
       <div className="flex h-lvh">
         <div className="w-[70%]  bg-[#272729] relative  flex flex-col max-md:w-[100%]">
         <NavProfileRoom
@@ -198,7 +193,7 @@ const Chat = () => {
               </div>
             </div>
           </div>
-          <div className="overflow-y-auto overflow-x-hidden scrollbar-thin h-[60%] scroll-hidden p-2 max-md:h-[50%]">
+          <div className="overflow-y-auto overflow-x-hidden scrollbar-thin h-[60%] scroll-hidden p-2 max-md:h">
             <div className="flex flex-col">
               {messages.map((msg, index) => (
                 <>
