@@ -112,9 +112,8 @@ const Chat = () => {
       timestamp: new Date().toISOString()
     };
 
-    
-    setMessages((prevMessages) => [...prevMessages, messageData]);
     socket.emit('sendMessage', messageData);
+    setMessages((prevMessages) => [...prevMessages, messageData]);
     setInputMessage("");
     setLastMessageTime(currentTime);
   };
