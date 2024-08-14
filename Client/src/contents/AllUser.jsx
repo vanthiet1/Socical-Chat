@@ -20,7 +20,7 @@ const AllUser = () => {
     const { data: User, isLoading, error } = userService.useGetAnUser(user?.id);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>Đợi 1 tí</div>;
     }
 
     if (error) {
