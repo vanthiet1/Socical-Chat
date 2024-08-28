@@ -10,10 +10,9 @@ import messageService from "../../services/Message";
 import userService from "../../services/User";
 import { showToastSuccess, showToastError } from "../../config/toastConfig";
 import FormatDateAndTime from "../../config/timeMessage";
-import { ContentContext } from "../../hooks/contexts/TabUiContext";
+
 const Chat = () => {
   const { user } = useContext(UserContext);
-  const {handleContentChange} = useContext(ContentContext)
   const { idUserSelecteRom } = useContext(UserRomChatContext);
   const { data: selectedUser } = userService.useGetAnUserById(idUserSelecteRom);
   const { data: userLogin } = userService.useGetAnUser(user?.id);
@@ -157,6 +156,9 @@ const Chat = () => {
     );
     socket.emit('deleteMessage', { id });
   };
+  const returnHome = ()=>{
+    window.location.reload()
+  }
 
   return (
     <div>
@@ -185,7 +187,7 @@ const Chat = () => {
               </button>
               <button
                 className="mt-2 bg-[#4a4a4a] p-1 w-[200px] rounded-[5px] text-[#fff] hover:bg-[#616161] duration-300 max-md:w-full"
-                onClick={()=>handleContentChange(2)}
+                onClick={()=>returnHome()}
               >
                 Quay lại
               </button>
